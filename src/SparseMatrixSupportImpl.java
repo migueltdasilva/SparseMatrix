@@ -36,19 +36,6 @@ public class SparseMatrixSupportImpl implements SparseMatrixSupport<SparseMatrix
             pointerRes, first.getRowNum(), second.getColNum());
     }
 
-    public static Map<Integer, Integer> getMapColsWithVals(
-        SparseMatrix matrix, int idxRows) {
-
-        Map<Integer, Integer> hmColsWithVals =  new HashMap<>();
-
-        for (int colIdx = matrix.getPointer()[idxRows]; colIdx < matrix.getPointer()[idxRows + 1]; colIdx++) {
-            int colNum = matrix.getCols()[colIdx];
-            hmColsWithVals.put(colNum, matrix.getValues()[colIdx]);
-        }
-
-        return hmColsWithVals;
-    }
-
     private void calcAndFillMatrixRow(SparseMatrix matrix,
                                       Map<Integer, Integer> hmColsWithVals,
                                       List<Integer> alValues, List<Integer> alCols) {
@@ -67,6 +54,26 @@ public class SparseMatrixSupportImpl implements SparseMatrixSupport<SparseMatrix
                 alCols.add(j);
             }
         }
+    }
+
+    /** Calculate Map in format colunm number to value in that column
+     *  for a row of matrix
+     @param matrix  Sparce matrix.
+     @param  idxRow   Index of row.
+     @return Map<Integer, Integer> with keys column num and values matrix values of this column
+     */
+    public static Map<Integer, Integer> getMapColsWithVals(
+        SparseMatrix matrix, int idxRow) {
+
+        Map<Integer, Integer> hmColsWithVals =  new HashMap<>();
+        int [] pointer = matrix.getPointer();
+
+        for (int colIdx = pointer[idxRow]; colIdx < pointer[idxRow + 1]; colIdx++) {
+            int colNum = matrix.getCols()[colIdx];
+            hmColsWithVals.put(colNum, matrix.getValues()[colIdx]);
+        }
+
+        return hmColsWithVals;
     }
 
     /** Generate sparse array with random elements
