@@ -18,7 +18,9 @@ public class SparseMatrixSupportImpl implements SparseMatrixSupport<SparseMatrix
 
     @Override
     public SparseMatrix multiply(SparseMatrix first, SparseMatrix second) {
-
+        if (first.getColNum() != second.getRowNum()) {
+            throw new IllegalArgumentException("Matrix inner dimensions must agree.");
+        }
         SparseMatrix secondT = second.transpose();
         List<Integer> alValues = new ArrayList<>(first.getColNum());
         List<Integer> alCols = new ArrayList<>(first.getColNum());
@@ -56,7 +58,7 @@ public class SparseMatrixSupportImpl implements SparseMatrixSupport<SparseMatrix
         }
     }
 
-    /** Calculate Map in format colunm number to value in that column
+    /** Calculate Map in format column number to value in given row
      *  for a row of matrix
      @param matrix  Sparce matrix.
      @param  idxRow   Index of row.
